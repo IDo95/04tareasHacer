@@ -1,4 +1,5 @@
 const { green } = require('colors');
+const { listartareascheck } = require('../helpers/inquirer');
 const Tarea = require('./tarea');
 require('colors');
 
@@ -9,6 +10,15 @@ class tareas {
     constructor() {
         this._listado = {};
     }
+
+    borrartarea(id = '') {
+        if (this._listado[id]) {
+            delete this._listado[id];
+        }
+
+    }
+
+
 
     get arr() {
         const listado = [];
@@ -65,7 +75,7 @@ class tareas {
             switch (estado) {
                 case true:
                     if (completadoen !== null) {
-                        console.log(`${indice}`.green, '.', desc, '::', 'completado'.green, '-', completadoen);
+                        console.log(`${indice}`.green, '.', desc, '::', `${ completadoen.green }`);
                         indice++;
                     }
 
@@ -85,6 +95,22 @@ class tareas {
              }*/
         })
 
+    }
+
+    marcarcompletado(ids = []) {
+        ids.forEach(id => {
+            const tarea = this._listado[id];
+            if (!tarea.completadoen) {
+                tarea.completadoen = new Date().toISOString();
+            }
+        })
+        this.arr.forEach(tarea => {
+
+            if (!ids.includes(tarea.id)) {
+                this._listado[tarea.id].completadoen = null;
+            }
+
+        });
     }
 }
 

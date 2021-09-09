@@ -80,9 +80,78 @@ const leerinput = async(message) => {
 const pausa = async() => {
     //console.log('PRESIONE ENTER PARA CONTINUAR'.green);
     //console.log('====================================\n'.green);
+    console.log();
     await inquirer.prompt(parapausar);
     // return name;
 }
 
 
-module.exports = { inquirermenu, pausa, leerinput };
+const listarparaborrar = async(tareas = []) => {
+    const choices = tareas.map((tarea, index) => { //revisar a funcion map y los parametros q trae (asi como el foreach tra --value, index, array--)
+        const idx = /*`${index+1}`.green;*/ `${index + 1}`.green;
+        return {
+            value: tarea.id,
+            name: `${idx}. ${tarea.desc}`
+        }
+    });
+
+
+    const preguntas = {
+        type: 'list',
+        name: 'id',
+        message: 'Borrar?',
+        choices
+    }
+
+    choices.unshift({
+        value: '0',
+        name: '0.'.green + 'Cancelar'
+    });
+
+
+    const { id } = await inquirer.prompt(preguntas);
+    return id;
+
+
+}
+
+
+const confirmar = async(message) => {
+    const question = {
+        type: 'confirm',
+        name: 'ok',
+        message
+    }
+
+    const { ok } = await inquirer.prompt(question);
+    return ok;
+}
+
+const listartareascheck = async(tareas = []) => {
+
+
+    const choices = tareas.map((tarea, index) => { //revisar a funcion map y los parametros q trae (asi como el foreach tra --value, index, array--)
+        const idx = /*`${index+1}`.green;*/ `${index + 1}`.green;
+        return {
+            value: tarea.id,
+            name: `${idx}. ${tarea.desc}`,
+            checked: (tarea.completadoen) ? true : false
+        }
+    });
+
+
+    const pregunta = {
+        type: 'checkbox',
+        name: 'ids',
+        message: 'Selecciones',
+        choices
+    }
+
+
+    const { ids } = await inquirer.prompt(pregunta);
+    return ids;
+
+
+}
+
+module.exports = { inquirermenu, pausa, leerinput, listarparaborrar, confirmar, listartareascheck };
